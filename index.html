@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>LB</title>
+	</head>
+	<script src="index.js" type="text/javascript" charset="utf-8"></script>
+	<!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>-->
+	<script>
+		hljs.initHighlightingOnLoad();
+	</script>
+	<script type="text/javascript">
+		TestJSB.setObj()
+	</script>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		
+		body {
+			background-color: rgba(255, 255, 255, 0.9);
+		}
+		
+		ul,
+		div {
+			list-style: none;
+			text-align: center;
+		}
+		
+		a,
+		li {
+			display: inline-block;
+			width: 90%;
+			line-height: 50px;
+			background-color: #333;
+			margin-top: 20px;
+			border-radius: 10px;
+			color: white;
+			text-decoration: none;
+		}
+	</style>
+
+	<body>
+
+		<pre>
+<code class="javascript">
+/**
+ * 1 首先引入JSSDK的JS
+   2 调用相应的方法 
+ */
+ //eg： 调用 toast
+ //useScheme参数 默认不传递是对象调用模式，true是URL拦截模式
+ var param = {
+ 	useScheme: false, 
+   	text: "我是toast"
+    }
+   TestJSB.toast(param,function(res){
+   	//这里写回调的方法
+   })
+   
+ /**
+ * 1 APP默认注入对象是 appTest
+   2 回调函数是 TestJSB.callbyNative()
+   3 默认的scheme是 appTest
+   4 调用参数 以toast为例 前端最终调用如下
+   5 具体的参数可以打开浏览器开发者模式 点击按钮 在控制台中有详细参数
+   
+ */
+var param = {
+	"callbackId": 0,
+	"name": "toast",
+	"param": {
+		"version": "0.0.1",
+		"name": "toast",
+		"description": "提示",
+		"useScheme": false,
+		"text": "我是toast"
+	}
+}
+appTest.toast(param);
+//如果是 URL拦截 URL参数如下
+var url = 'appTest://%7B%22callbackId%22%3A0%2C%22name%22%3A%22toast%22%2C%22param%22%3A%7B%22version%22%3A%223.0.0%22%2C%22name%22%3A%22toast%22%2C%22useScheme%22%3Atrue%2C%22text%22%3A%22%E6%88%91%E6%98%AFtoast%22%7D%7D'
+//APP端需要 解码 解码以后的链接如下
+var url ='appTest://{"callbackId":0,"name":"toast","param":{"version":"3.0.0","name":"toast","useScheme":true,"text":"我是toast"}}'
+//app回调格式
+//其中 callbackId是前端调用到后端的 data里面的内容可以自定义
+TestJSB.callbyNative('{"callbackId":1,"data":{"imgurl":"base64://sfadwqasdas"}}')
+//如果 默认对象 和 默认的 scheme 不符合APP的命名规范 APP可以自定义 这2个字段 但是务必保持一致 前端可以通过调用 TestJSB.setObj()方法适配APP
+TestJSB.setObj("kobe")
+//这时候 默认的对象就是 kobe.toast , 默认的URL拦截就是  kobe://
+</code></pre>
+		<h1 id="info">我是对象注入方式</h1>
+		<ul>
+			<li>toast</li>
+			<li>camera</li>
+			<li>qrcode</li>
+			<li>barcode</li>
+			<li>qrcodeImage</li>
+			<li>tel</li>
+			<li>email</li>
+			<li>sms</li>
+			<li>geolocation</li>
+			<li>dialog</li>
+			<li>loading</li>
+			<li>newWebview</li>
+			<li>closeWebview</li>
+			<li>redirect</li>
+			<li>shareInfo</li>
+			<li>uploadImage</li>
+
+		</ul>
+
+	</body>
+	<script type="text/javascript">
+		
+   function getUseScheme(name) { 
+      
+        var r = window.location.search.substr(1) 
+       return  (r.indexOf("useScheme")>-1)?true:false;
+    } 
+		var useScheme = false;
+		 getUseScheme(useScheme)&&(useScheme=true)
+		if (getUseScheme(useScheme)) info.innerText ="我是URL拦截方式";
+			var param = {
+				toast: {
+					useScheme: useScheme,
+					text: "我是toast"
+				},
+				camera: {
+					useScheme: useScheme
+				},
+				qrcode: {
+					useScheme: useScheme
+				},
+				barcode: {
+					useScheme: useScheme
+				},
+				qrcodeImage: {
+					useScheme: useScheme
+				},
+				closeWebview: {
+					useScheme: useScheme
+				},
+				uploadImage: {
+					useScheme: useScheme
+				},
+				tel: {
+					useScheme: useScheme,
+					text: "18721721426"
+				},
+				email: {
+					useScheme: useScheme,
+					receiver: ["lixiaolong@chexiang.com"],
+					cc: ["380636311@qq.com"],
+					text: "你好",
+					title: "我是测试发送邮件"
+				},
+				sms: {
+					useScheme: useScheme,
+					text: "我是短信内容",
+					tel: "18721721426"
+				},
+				dialog: {
+					useScheme: useScheme,
+					title: "我是对话框",
+					text: "我是里面的内容",
+					btnArray: [{
+						ok: "确定"
+					}, {
+						cancel: "取消"
+					}]
+
+				},
+				loading: {
+					useScheme: useScheme,
+					text: "正在加载请稍受",
+					open: true
+				},
+				redirect: {
+					useScheme: useScheme,
+					text: "login" //peccancy
+				},
+
+				shareInfo: {
+					useScheme: useScheme,
+					url: "",
+					title: "",
+					content: "",
+					imgUrl: ""
+				},
+
+				newWebview: {
+					useScheme: useScheme,
+					url: "https://www.baidu.com"
+				},
+
+			}
+
+		var s = document.querySelectorAll("li");
+		[].forEach.call(s, function(o) {
+			var key = o.innerText;
+			o.addEventListener("click", function() {
+				TestJSB[key](param[key] || {}, function(res) {
+					console.log("回调成功" + JSON.stringify(res))
+					key !== "toast" && appTest.toast({
+						text: JSON.stringify(res)
+					})
+				})
+			})
+		})
+	</script>
+
+</html>
+
+
+
+
